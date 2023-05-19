@@ -135,6 +135,11 @@
           description = "Zig development environment";
         };
 
+        latex = {
+            path = ./latex;
+            description = "A minimal customized latex template for documentation work";
+        };
+
         # Aliases
         rt = rust-toolchain;
       };
