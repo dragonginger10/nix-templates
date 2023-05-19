@@ -165,7 +165,7 @@
             --experimental-features 'nix-command flakes' \
             flake init \
             --template \
-            "github:the-nix-way/dev-templates#''${TEMPLATE}"
+            "github:dragonginger10/nix-templates#''${TEMPLATE}"
         '';
 
         update = writeScriptBin "update" ''
