@@ -140,6 +140,11 @@
             description = "A minimal customized latex template for documentation work";
         };
 
+        typst = {
+            path = ./typst;
+            description = "Typst markup environment";
+        };
+
         # Aliases
         rt = rust-toolchain;
       };
