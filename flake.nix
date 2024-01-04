@@ -9,11 +9,9 @@
 
   outputs = { self, nixpkgs }: let
     systems = ["x86_64-linux"];
-    lib = import ./lib {inherit systems; lib = nixpkgs.lib;};
-    inherit (lib.forAllSystems (pkgs: pkgs)) writeScriptBin mkShell;
-    exec = lib.forAllSystems (pkgs: pkg: "${pkgs.${pkg}}/bin/${pkg}");
+    lib = import ./lib {inherit systems nixpkgs;};
 
-    dvt = writeScriptBin "dvt" ''
+    dvt = lib.forAllSystems(pkgs: pkgs.writeScriptBin "dvt" ''
       if [ -z $1 ]; then
         echo "no template specified"
         exit 1
@@ -26,31 +24,34 @@
         flake init \
         --template \
         "github:dragonginger10/nix-templates#''${TEMPLATE}"
-    '';
+    '');
 
-    update = writeScriptBin "update" ''
-      for dir in `ls -d */`; do # Iterate through all the templates
-        (
-          cd $dir
-          ${exec "nix"} flake update # Update flake.lock
-          ${exec "direnv"} reload    # Make sure things work after the update
-        )
-      done
-    '';
   in
     {
       # templates = import ./templates.nix;
       formatter = lib.forAllSystems (pkgs: pkgs.alejandra);
 
-      devShells = lib.forAllSystems (pkgs: 
-        pkgs.mkShell {
-          packages = with pkgs; [
+      devShell = lib.forAllSystems (pkgs:
+      let
+        exec = pkg: "${pkgs.${pkg}}/bin/${pkg}";
+        update = pkgs.writeScriptBin "update" ''
+          for dir in `ls -d */`; do # Iterate through all the templates
+            (
+              cd $dir
+              ${exec "nix"} flake update # Update flake.lock
+              ${exec "direnv"} reload    # Make sure things work after the update
+            )
+          done
+        '';
+      in
+       pkgs.mkShell {
+        packages = with pkgs; [
           nil
-          format
-           update 
-          ];
-        });
-
+        ] ++ [update];
+        shellHook = ''
+          echo "Welcome to nix"
+        '';      
+      });
       packages = rec {
         default = dvt;
 
