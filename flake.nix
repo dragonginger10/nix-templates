@@ -10,7 +10,7 @@
     self,
     nixpkgs,
   }: let
-    systems = ["x86_64-linux"];
+    systems = ["x86_64-linux" "aarch64-linux"];
     forAllSystems = import ./lib/forallsystems.nix {inherit systems nixpkgs;};
     exec = f: pkg: "${f.${pkg}}/bin/${pkg}";
   in {
