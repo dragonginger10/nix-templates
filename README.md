@@ -18,7 +18,7 @@ nix flake init --template github:the-nix-way/dev-templates#rust
 nix flake new --template github:the-nix-way/dev-templates#rust ${NEW_PROJECT_DIRECTORY}
 ```
 
-> **Note**: All templates are pinned to the [22.11 release][release] of Nixpkgs.
+> **Note**: All templates are pinned to the [23.11 release][release] of Nixpkgs.
 
 ## How to use the templates
 
@@ -31,73 +31,26 @@ Once your preferred template has been initialized, you can use the provided shel
 
 | Language/framework/tool  | Template                      |
 | :----------------------- | :-----------------------------|
-| [Clojure]                | [`clojure`](./clojure/)       |
-| [Cue]                    | [`cue`](./cue/)               |
-| [Dhall]                  | [`dhall`](./dhall/)           |
 | [Elixir]                 | [`elixir`](./elixir/)         |
-| [Elm]                    | [`elm`](./elm/)               |
-| [Gleam]                  | [`gleam`](./gleam/)           |
 | [Go]                     | [`go`](./go/)                 |
 | [Hashicorp] tools        | [`hashi`](./hashi/)           |
-| [Java]                   | [`java`](./java/)             |
-| [Kotlin]                 | [`kotlin`](./kotlin/)         |
-| [Nickel]                 | [`nickel`](./nickel/)         |
-| [Nim]                    | [`nim`](./nim/)               |
+| [Haskell]                | [`haskel`](./haskel/)         |
+| [Latex] tools            | [`latex`](./latex/)           |
 | [Nix]                    | [`nix`](./nix/)               |
-| [Node.js][node]          | [`node`](./node/)             |
-| [OCaml]                  | [`ocaml`](./ocaml/)           |
-| [Open Policy Agent][opa] | [`opa`](./opa)                |
 | [PHP]                    | [`php`](./php/)               |
-| [Protobuf]               | [`protobuf`](./protobuf/)     |
-| [Purescript]             | [`purescript`](./purescript/) |
-| [Ruby]                   | [`ruby`](./ruby/)             |
+| [Python]                 | [`python`](./python/)         |
 | [Rust]                   | [`rust`](./rust/)             |
-| [Scala]                  | [`scala`](./scala/)           |
-| [Zig]                    | [`zig`](./zig/)               |
-
+| [Typst] tools            | [`typst`](./typst/)           |
+  
 ## Template contents
 
 The sections below list what each template includes. In all cases, you're free to add and remove packages as you see fit; the templates are just boilerplate.
 
-### [`clojure`](./clojure/)
-
-- [Clojure] 1.11.1.1149
-- [Boot] 2.8.3
-- [Leiningen] 2.9.8
-
-### [`cue`](./cue/)
-
-- [Cue] 0.4.3
-- [nix-cue]
-
-### [`dhall`](./dhall)
-
-- [Dhall] 1.40.2
-- [dhall-bash]
-- [dhall-csv] (Linux only)
-- [dhall-docs]
-- [dhall-json]
-- [dhall-lsp-server]
-- [dhall-nix]
-- [dhall-nixpkgs]
-- [dhall-openapi]
-- [dhall-text] (Linux only)
-- [dhall-toml]
-- [dhall-yaml]
 
 ### [`elixir`](./elixir/)
 
 - [Elixir] 1.13.4, including [mix] and [IEx]
 - [gigalixir] (Linux only)
-
-### [`elm`](./elm/)
-
-- [Elm] 0.19.1
-- [elm2nix] 0.2.1
-
-### [`gleam`](./gleam/)
-
-- [Gleam] 0.22.1
 
 ### [`go`](./go/)
 
@@ -123,27 +76,6 @@ The sections below list what each template includes. In all cases, you're free t
 - [GHC][haskell] 9.0.2
 - [cabal] 3.6.2.0
 
-### [`java`](./java)
-
-- [Java] 17.0.3
-- [Maven] 3.8.5
-- [Gradle] 7.5
-- [Ant] 1.10.11
-
-### [`kotlin`](./kotlin/)
-
-- [Kotlin] 1.7.10-release-333
-- [Gradle] 7.5
-
-### [`nickel`](./nickel/)
-
-- [Nickel] 0.2.0
-
-### [`nim`](./nim)
-
-- [Nim] 1.6.6
-- [nimble] 0.13.1
-
 ### [`nix`](./nix/)
 
 - [Cachix] 0.8.1
@@ -154,42 +86,10 @@ The sections below list what each template includes. In all cases, you're free t
 - [statix]
 - [vulnix]
 
-### [`node`](./node/)
-
-- [Node.js][node] 18.7.0
-- [npm] 8.15.0
-- [pnpm] 7.9.1
-- [Yarn] 1.22.19
-- [node2nix] 1.11.1
-
-### [`ocaml`](./ocaml/)
-
-- [OCaml] 4.13.1
-- [Dune] 3.4.1
-- [odoc] 2.1.1
-- [ocamlformat] 0.24.0
-
-### [`opa`](./opa/)
-
-- [Open Policy Agent][opa] 0.43.0
-- [Conftest] 0.34.0
-
 ### [`php`](./php/)
 
 - [PHP] 8.1.10
 - [Composer] 2.4.2
-
-### [`protobuf`](./protobuf/)
-
-- The [Buf CLI][buf] 1.7.0
-- [protoc][protobuf] 3.19.4
-
-### [`purescript`](./purescript/)
-
-- [Purescript]
-- [Spago]
-- [purescript-language-server]
-- [purs-tidy]
 
 ### [`python`](./python/)
 
@@ -197,10 +97,6 @@ The sections below list what each template includes. In all cases, you're free t
 - [pip] 22.1.2
 - [Virtualenv] 20.15.1
 - [mach-nix]
-
-### [`ruby`](./ruby/)
-
-- [Ruby] 3.1.2p20, plus the standard Ruby tools (`bundle`, `gem`, etc.)
 
 ### [`rust`](./rust/)
 
@@ -215,18 +111,9 @@ The sections below list what each template includes. In all cases, you're free t
 - [cargo-deny] 0.12.1
 - [cross] 0.2.4
 
-### [`scala`](./scala/)
-
-- [Scala] 3.1.0 ([Java] 17.0.3)
-- [sbt] 1.7.1
-
-### [`zig`](./zig/)
-
-- [Zig] 0.9.1
-
 ## Code organization
 
-All of the templates have only the root [flake](./flake.nix) as a flake input. That root flake provides a common revision of [Nixpkgs] and [`flake-utils`][flake-utils] to all the templates.
+All of the templates have only the root [flake](./flake.nix) as a flake input. That root flake provides a common revision of [Nixpkgs] to all the templates.
 
 [ant]: https://ant.apache.org
 [boot]: https://www.boot-clj.com
