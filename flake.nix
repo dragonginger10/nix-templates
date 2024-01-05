@@ -11,7 +11,7 @@
     nixpkgs,
   }: let
     systems = ["x86_64-linux"];
-    forAllSystems = import ./lib/forallsystems {inherit systems nixpkgs;};
+    forAllSystems = import ./lib/forallsystems.nix {inherit systems nixpkgs;};
     exec = f: pkg: "${f.${pkg}}/bin/${pkg}";
   in {
     # templates = import ./templates.nix;
