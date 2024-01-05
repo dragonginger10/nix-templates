@@ -113,7 +113,7 @@ The sections below list what each template includes. In all cases, you're free t
 
 ## Code organization
 
-All of the templates have only the root [flake](./flake.nix) as a flake input. That root flake provides a common revision of [Nixpkgs] to all the templates.
+All of the templates have only the root [flake](./flake.nix) as a flake input. That root flake provides a common revision of [Nixpkgs] and [`flake-utils`][flake-utils] to all the templates.
 
 [ant]: https://ant.apache.org
 [boot]: https://www.boot-clj.com
