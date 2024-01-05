@@ -14,7 +14,7 @@
     forAllSystems = import ./lib/forallsystems.nix {inherit systems nixpkgs;};
     exec = f: pkg: "${f.${pkg}}/bin/${pkg}";
   in {
-    # templates = import ./templates.nix;
+    templates = import ./templates.nix;
     formatter = forAllSystems (pkgs: pkgs.alejandra);
 
     devShell = forAllSystems (pkgs: let
