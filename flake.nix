@@ -17,19 +17,30 @@
         import nixpkgs {inherit system;}
     );
     forAllSystems = f: lib.genAttrs systems (system: f pkgsFor.${system});
-  in 
-  forAllSystems (pkgs: 
-  let
-      exec = pkg: "${pkgs.${pkg}}/bin/${pkg}";
+    exec = f: pkg: "${f.${pkg}}/bin/${pkg}";
+  in {
+    # templates = import ./templates.nix;
+    formatter = forAllSystems (pkgs: pkgs.alejandra);
+
+    devShell = forAllSystems (pkgs: let
       update = pkgs.writeScriptBin "update" ''
         for dir in `ls -d */`; do # Iterate through all the templates
           (
             cd $dir
-            ${exec "nix"} flake update # Update flake.lock
-            ${exec "direnv"} reload    # Make sure things work after the update
+            ${exec pkgs "nix"} flake update # Update flake.lock
+            ${exec pkgs "direnv"} reload    # Make sure things work after the update
           )
         done
       '';
+    in
+      pkgs.mkShell {
+        packages = with pkgs; [
+          nil
+          update
+        ];
+      });
+
+    packages = forAllSystems (pkgs: let
       dvt = pkgs.writeScriptBin "dvt" ''
         if [ -z $1 ]; then
           echo "no template specified"
@@ -38,26 +49,15 @@
 
         TEMPLATE=$1
 
-        ${exec "nix"} \
+        ${exec pkgs "nix"} \
           --experimental-features 'nix-command flakes' \
           flake init \
           --template \
           "github:dragonginger10/nix-templates#''${TEMPLATE}"
       '';
-  in
-  {
-    templates = import ./templates.nix;
-    formatter = pkgs.alejandra;
-
-    devShell = pkgs.mkShell {
-      packages = with pkgs; [
-        nil
-        update
-      ];
-    };
-    packages = {
+    in {
       inherit dvt;
-      default = dvt;      
-    };
-  });
+      default = dvt;
+    });
+  };
 }
