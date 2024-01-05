@@ -6,19 +6,16 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs =
-    { self
-    , nixpkgs
-    , flake-utils
-    }:
-
-    flake-utils.lib.eachDefaultSystem (system:
-    let
-      pkgs = import nixpkgs { inherit system; };
-    in
-    {
+  outputs = {
+    self,
+    nixpkgs,
+    flake-utils,
+  }:
+    flake-utils.lib.eachDefaultSystem (system: let
+      pkgs = import nixpkgs {inherit system;};
+    in {
       devShell = pkgs.mkShell {
-        packages = with pkgs; [ phpPackages.composer php ];
+        packages = with pkgs; [phpPackages.composer php];
 
         shellHook = ''
           echo "`${pkgs.php}/bin/php --version`"

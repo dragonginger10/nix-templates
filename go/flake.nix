@@ -6,19 +6,16 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs =
-    { self
-    , nixpkgs
-    , flake-utils
-    }:
-
-    flake-utils.lib.eachDefaultSystem (system:
-    let
+  outputs = {
+    self,
+    nixpkgs,
+    flake-utils,
+  }:
+    flake-utils.lib.eachDefaultSystem (system: let
       goVersion = 19;
-      overlays = [ (self: super: { go = super."go_1_${toString goVersion}"; }) ];
-      pkgs = import nixpkgs { inherit overlays system; };
-    in
-    {
+      overlays = [(self: super: {go = super."go_1_${toString goVersion}";})];
+      pkgs = import nixpkgs {inherit overlays system;};
+    in {
       devShells.default = pkgs.mkShellNoCC {
         packages = with pkgs; [
           # go 1.19 (specified by overlay)
