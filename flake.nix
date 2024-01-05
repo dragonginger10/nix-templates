@@ -17,11 +17,9 @@
         import nixpkgs {inherit system;}
     );
     forAllSystems = f: lib.genAttrs systems (system: f pkgsFor.${system});
-  in {
-    # templates = import ./templates.nix;
-    formatter = forAllSystems (pkgs: pkgs.alejandra);
-
-    devShell = forAllSystems (pkgs: let
+  in 
+  forAllSystems (pkgs: 
+  let
       exec = pkg: "${pkgs.${pkg}}/bin/${pkg}";
       update = pkgs.writeScriptBin "update" ''
         for dir in `ls -d */`; do # Iterate through all the templates
@@ -32,20 +30,6 @@
           )
         done
       '';
-    in
-      pkgs.mkShell {
-        packages = with pkgs;
-          [
-            nil
-          ]
-          ++ [update];
-        shellHook = ''
-          echo "Welcome to nix"
-        '';
-      });
-    packages = forAllSystems (pkgs: rec {
-      default = dvt;
-      exec = pkg: "${pkgs.${pkg}}/bin/${pkg}";
       dvt = pkgs.writeScriptBin "dvt" ''
         if [ -z $1 ]; then
           echo "no template specified"
@@ -60,6 +44,20 @@
           --template \
           "github:dragonginger10/nix-templates#''${TEMPLATE}"
       '';
-    });
-  };
+  in
+  {
+    templates = import ./templates.nix;
+    formatter = pkgs.alejandra;
+
+    devShell = pkgs.mkShell {
+      packages = with pkgs; [
+        nil
+        update
+      ];
+    };
+    packages = {
+      inherit dvt;
+      default = dvt;      
+    };
+  });
 }
