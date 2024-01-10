@@ -16,7 +16,7 @@
     in {
       devShells.default = pkgs.mkShell {
         packages = with pkgs;
-          [python poetry]
+          [python311 poetry]
           ++ (with pkgs.python311Packages; [pip]);
 
         shellHook = ''
