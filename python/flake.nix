@@ -1,27 +1,37 @@
 {
-  description = "A Nix-flake-based Python development environment";
-
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/release-23.05";
-    flake-utils.url = "github:numtide/flake-utils";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    poetry2nix.url = "github:nix-community/poetry2nix";
   };
 
   outputs = {
     self,
     nixpkgs,
-    flake-utils,
-  }:
-    flake-utils.lib.eachDefaultSystem (system: let
-      pkgs = import nixpkgs {inherit system;};
+    poetry2nix,
+  }: let
+    supportedSystems = ["x86_64-linux" "aarch64-linux"];
+    forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+    pkgs = forAllSystems (system: nixpkgs.legacyPackages.${system});
+  in {
+    packages = forAllSystems (system: let
+      inherit (poetry2nix.lib.mkPoetry2Nix {pkgs = pkgs.${system};}) mkPoetryApplication;
     in {
-      devShells.default = pkgs.mkShell {
-        packages = with pkgs;
-          [python311 poetry]
-          ++ (with pkgs.python311Packages; [pip]);
+      default = mkPoetryApplication {projectDir = self;};
+    });
 
-        shellHook = ''
-          ${pkgs.python}/bin/python --version
-        '';
+    devShells = forAllSystems (system: let
+      inherit (poetry2nix.lib.mkPoetry2Nix {pkgs = pkgs.${system};}) mkPoetryEnv;
+    in {
+      default = pkgs.${system}.mkShellNoCC {
+        packages = with pkgs.${system}; [
+          (mkPoetryEnv {projectDir = self;})
+          poetry
+          ruff
+          ruff-lsp
+          black
+          isort
+        ];
       };
     });
+  };
 }
