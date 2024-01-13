@@ -56,6 +56,11 @@ rec {
     description = "Typst markup environment";
   };
 
+  simple-container = {
+    path = ./simple-container;
+    description = "A simple web server running in a nix container";
+  };
+
   # Aliases
   rt = rust-toolchain;
 }
