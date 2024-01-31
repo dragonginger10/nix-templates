@@ -61,6 +61,11 @@ rec {
     description = "A simple web server running in a nix container";
   };
 
+  shell = {
+    path = ./shell;
+    description = "A simple shell dev environment";
+  };
+
   # Aliases
   rt = rust-toolchain;
 }
