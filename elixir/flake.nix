@@ -3,30 +3,26 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/release-23.11";
-    flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs = {
     self,
     nixpkgs,
-    flake-utils,
   }:
-    flake-utils.lib.eachDefaultSystem (system: let
-      pkgs = import nixpkgs {inherit system;};
-    in {
-      devShells.default = pkgs.mkShell {
-        packages =
-          (with pkgs; [elixir])
-          ++ pkgs.lib.optionals (pkgs.stdenv.isLinux) (with pkgs; [gigalixir inotify-tools libnotify])
-          ++ # Linux only
-          pkgs.lib.optionals (pkgs.stdenv.isDarwin) (with pkgs; [terminal-notifier])
-          ++ # macOS only
-          (with pkgs.darwin.apple_sdk.frameworks; [CoreFoundation CoreServices]);
-
-        shellHook = ''
-          ${pkgs.elixir}/bin/mix --version
-          ${pkgs.elixir}/bin/iex --version
-        '';
+  let
+    systems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin"];
+    forEachSystem = f: nixpkgs.lib.genAttrs systems (system: f {
+      pkgs = import nixpkgs { inherit system; };
+    });
+  in
+  {
+    devShells = forEachSystem ({pkgs}: {
+      default = pkgs.mkShell {
+        packages = (with pkgs; [ elixir ]) ++
+        pkgs.lib.optional (pkgs.stdenv.isLinux) (with pkgs; [ gigalixir inotify-tools libnotify ]) ++
+        pkgs.lib.optional (pkgs.stdenv.isDarwin) ((with pkgs; [terminal-notifier]) ++ 
+        (with pkgs.darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices ]));
       };
     });
+  };
 }
