@@ -27,10 +27,11 @@
           (mkPoetryEnv {projectDir = self;})
           poetry
           ruff
-          ruff-lsp
           black
           isort
-        ];
+        ] ++ (with pkgs.${system}.python311Packages; [
+          python-lsp-ruff
+        ]);
       };
     });
   };
