@@ -34,8 +34,14 @@ rec {
 
   python = {
     path = ./python;
-    description = "Python development environment";
+    description = "Python app development environment";
   };
+
+  pyscript = {
+    path = ./pyscript;
+    description = "A simple python script environment";
+  };
+
   rust = {
     path = ./rust;
     description = "Rust development environment";
