@@ -5,18 +5,21 @@
     nipkgs.url = "github:NixOS/nixpkgs/release-23.11";
   };
 
-  outputs = { self, nixpkgs }:
-  let
+  outputs = {
+    self,
+    nixpkgs,
+  }: let
     inherit (nixpkgs.lib) genAttrs;
     systems = ["x86_64-linux" "aarch64-linux"];
-    forEachSystem = f: genAttrs systems (system: f {
-      pkgs = import nixpkgs { inherit system; };
-    });
-  in
-  {
-    devShells = forEachSystem ({ pkgs }: {
+    forEachSystem = f:
+      genAttrs systems (system:
+        f {
+          pkgs = import nixpkgs {inherit system;};
+        });
+  in {
+    devShells = forEachSystem ({pkgs}: {
       default = pkgs.mkShell {
-        packages = with pkgs; [ shellcheck ];
+        packages = with pkgs; [shellcheck];
       };
     });
   };

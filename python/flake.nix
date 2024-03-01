@@ -23,15 +23,17 @@
       inherit (poetry2nix.lib.mkPoetry2Nix {pkgs = pkgs.${system};}) mkPoetryEnv;
     in {
       default = pkgs.${system}.mkShellNoCC {
-        packages = with pkgs.${system}; [
-          (mkPoetryEnv {projectDir = self;})
-          poetry
-          ruff
-          black
-          isort
-        ] ++ (with pkgs.${system}.python311Packages; [
-          python-lsp-ruff
-        ]);
+        packages = with pkgs.${system};
+          [
+            (mkPoetryEnv {projectDir = self;})
+            poetry
+            ruff
+            black
+            isort
+          ]
+          ++ (with pkgs.${system}.python311Packages; [
+            python-lsp-ruff
+          ]);
       };
     });
   };
