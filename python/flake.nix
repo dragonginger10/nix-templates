@@ -1,7 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/release-23.11";
-    poetry2nix.url = "github:nix-community/poetry2nix";
+    nixpkgs.url = "github:NixOS/nixpkgs/release-24.11";
   };
 
   outputs = {
@@ -13,25 +12,17 @@
     forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
     pkgs = forAllSystems (system: nixpkgs.legacyPackages.${system});
   in {
-    packages = forAllSystems (system: let
-      inherit (poetry2nix.lib.mkPoetry2Nix {pkgs = pkgs.${system};}) mkPoetryApplication;
-    in {
-      default = mkPoetryApplication {projectDir = self;};
-    });
-
-    devShells = forAllSystems (system: let
-      inherit (poetry2nix.lib.mkPoetry2Nix {pkgs = pkgs.${system};}) mkPoetryEnv;
-    in {
+    formatters = pkgs.alejandra;
+    devShells = forAllSystems (system: {
       default = pkgs.${system}.mkShellNoCC {
         packages = with pkgs.${system};
           [
-            (mkPoetryEnv {projectDir = self;})
-            poetry
             ruff
             black
             isort
+            just
           ]
-          ++ (with pkgs.${system}.python311Packages; [
+          ++ (with pkgs.${system}.python312Packages; [
             python-lsp-ruff
           ]);
       };
