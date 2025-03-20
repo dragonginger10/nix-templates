@@ -45,6 +45,7 @@
             ruff
             black
             isort
+            just
           ]
           ++ (with pkgs.python311Packages; [
             pip
