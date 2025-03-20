@@ -29,8 +29,12 @@
       '';
     in
       pkgs.mkShell {
+        shellHook = ''
+          alias j = just
+        '';
         packages = with pkgs; [
           nil
+          just
           update
         ];
       });
