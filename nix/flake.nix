@@ -2,7 +2,7 @@
   description = "A Nix-flake-based Nix development environment";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/release-23.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/release-24.11";
   };
 
   outputs = {
