@@ -50,7 +50,7 @@
           ++ (with pkgs.python311Packages; [
             pip
           ])
-          ++ (self.packages.${pkgs.system}.default.propagatedBuildInputs);
+          ++ self.packages.${pkgs.system}.default.propagatedBuildInputs;
 
         shellHook = ''
           ${pkgs.python312}/bin/python --version

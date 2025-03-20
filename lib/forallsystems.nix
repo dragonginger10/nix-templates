@@ -2,7 +2,7 @@
   systems,
   nixpkgs,
 }: let
-  lib = nixpkgs.lib;
+  inherit (nixpkgs) lib;
   pkgsFor = lib.genAttrs systems (
     system:
       import nixpkgs {inherit system;}

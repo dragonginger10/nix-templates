@@ -1,9 +1,15 @@
+set quiet
+
 default: fmt up
+lint: fmt check
 
 fmt:
   nix fmt
 
-@up:
+check:
+  statix check
+
+up:
   update
   git commit -am "update all flakes"
 
