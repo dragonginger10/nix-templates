@@ -2,7 +2,7 @@
   description = "A Nix-flake-based Python script development environment";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/release-23.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/release-24.11";
   };
 
   outputs = {
@@ -25,9 +25,10 @@
         inherit pname version;
 
         propagatedBuildInputs = [
-          (pkgs.python311.withPackages (ps:
+          (pkgs.python312.withPackages (ps:
             with ps; [
               rich
+              loguru
             ]))
         ];
 
@@ -40,12 +41,18 @@
       default = pkgs.mkShell {
         # pulls from build inputs of packages
         packages = with pkgs;
-          [virtualenv black isort]
-          ++ (with pkgs.python311Packages; [pip python-lsp-ruff])
+          [
+            ruff
+            black
+            isort
+          ]
+          ++ (with pkgs.python311Packages; [
+            pip
+          ])
           ++ (self.packages.${pkgs.system}.default.propagatedBuildInputs);
 
         shellHook = ''
-          ${pkgs.python311}/bin/python --version
+          ${pkgs.python312}/bin/python --version
         '';
       };
     });
