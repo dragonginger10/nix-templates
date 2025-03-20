@@ -4,7 +4,7 @@ fmt:
   nix fmt
 
 up:
-  nix build
+  update
 
 version number:
   sed -ri 's/(release-)([0-9]+\.[0-9]+)/\1{{number}}/' */flake.nix
