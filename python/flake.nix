@@ -1,12 +1,11 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/release-24.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/release-25.05";
   };
 
   outputs = {
     self,
-    nixpkgs,
-    poetry2nix,
+    nixpkgs
   }: let
     supportedSystems = ["x86_64-linux" "aarch64-linux"];
     forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
@@ -20,6 +19,7 @@
             ruff
             black
             isort
+            uv
             just
           ]
           ++ (with pkgs.${system}.python312Packages; [
