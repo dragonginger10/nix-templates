@@ -2,17 +2,12 @@
   description = "A report built with Pandoc, XeLaTex and a custom font";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/release-24.11";
-    flake-utils.url = "github:numtide/flake-utils";
+    nixpkgs.url = "github:NixOS/nixpkgs/release-26.05";
+    flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    flake-utils,
-  }:
-    flake-utils.lib.eachDefaultSystem (system: let
-      pkgs = nixpkgs.legacyPackages.${system};
+  outputs = inputs @ { flake-parts, ... }: flake-parts.lib.mkFlake {
+    perSystem = {pkgs, ... }: let
       fonts = pkgs.makeFontsConf {fontDirectories = [pkgs.dejavu_fonts pkgs.dejavu_fontsEnv];};
       tex = pkgs.texlive.combine {
         inherit
@@ -33,14 +28,16 @@
       };
     in {
       devShells.default = with pkgs;
-        mkShell {
-          buildInputs = [
+        mkShellNoCC {
+          packages = [
             tex
+            just
             fontconfig
           ];
           shellHook = ''
             export FONTCONFIG_FILE=${fonts}
           '';
         };
-    });
+    };
+  };
 }

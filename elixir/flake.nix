@@ -2,14 +2,14 @@
   description = "A Nix-flake-based Elixir development environment";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/release-24.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/release-26.05";
   };
 
   outputs = {
     self,
     nixpkgs,
   }: let
-    systems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin"];
+    systems = ["x86_64-linux" "aarch64-linux"];
     forEachSystem = f:
       nixpkgs.lib.genAttrs systems (system:
         f {
@@ -20,9 +20,7 @@
       default = pkgs.mkShell {
         packages =
           (with pkgs; [elixir])
-          ++ pkgs.lib.optional pkgs.stdenv.isLinux (with pkgs; [gigalixir inotify-tools libnotify])
-          ++ pkgs.lib.optional pkgs.stdenv.isDarwin ((with pkgs; [terminal-notifier])
-            ++ (with pkgs.darwin.apple_sdk.frameworks; [CoreFoundation CoreServices]));
+          ++ pkgs.lib.optional pkgs.stdenv.isLinux (with pkgs; [gigalixir inotify-tools libnotify]);
       };
     });
   };

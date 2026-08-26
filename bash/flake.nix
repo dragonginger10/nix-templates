@@ -2,7 +2,7 @@
   description = "A nix flake shell dev environment";
 
   inputs = {
-    nipkgs.url = "github:NixOS/nixpkgs/release-24.11";
+    nipkgs.url = "github:NixOS/nixpkgs/release-26.05";
   };
 
   outputs = {

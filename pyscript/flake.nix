@@ -2,60 +2,55 @@
   description = "A Nix-flake-based Python script development environment";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/release-24.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/release-26.05";
+    flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-  }: let
-    supportedSystems = ["x86_64-linux" "aarch64-linux"];
-    forEachSystem = f:
-      nixpkgs.lib.genAttrs supportedSystems (system:
-        f {
-          pkgs = import nixpkgs {inherit system;};
-        });
-    pname = "script";
-    version = "1.0";
-  in {
-    formatter = forEachSystem ({pkgs}: pkgs.alejandra);
-    packages = forEachSystem ({pkgs}: rec {
-      default = script;
-      script = pkgs.stdenv.mkDerivation {
-        inherit pname version;
+  outputs = inputs @ { flake-parts,... }: flake-parts.lib.mkFlake {
+    systems = ["x86_64-linux" "aarch64-linux"];
 
-        propagatedBuildInputs = [
-          (pkgs.python312.withPackages (ps:
-            with ps; [
-              rich
-              loguru
-            ]))
-        ];
+    perSystem = {self', pkgs, ...}: {
+      formatter = pkgs.alejandra;
 
-        dontUnpack = ":";
-        installPhase = "install -Dm755 ${./${pname}.py} $out/bin/${pname}";
+      packages =  let
+        pname = "script";
+        version = "1.0";
+      in rec {
+        default = script;
+        script = pkgs.stdenv.mkDerivation {
+          inherit pname version;
+
+          propagatedBuildInputs = [
+            (pkgs.python312.withPackages (ps:
+              with ps; [
+                rich
+                loguru
+              ]))
+          ];
+
+          dontUnpack = ":";
+          installPhase = "install -Dm755 ${./${pname}.py} $out/bin/${pname}";
+        };
       };
-    });
 
-    devShells = forEachSystem ({pkgs}: {
-      default = pkgs.mkShell {
+    devShells.default = pkgs.mkShellNoCC {
         # pulls from build inputs of packages
-        packages = with pkgs;
-          [
+        packages = with pkgs; [
+            python314
             ruff
             black
             isort
             just
           ]
-          ++ (with pkgs.python311Packages; [
+          ++ (with pkgs.python314Packages; [
             pip
           ])
-          ++ self.packages.${pkgs.system}.default.propagatedBuildInputs;
+          ++ self'.packages.default.propagatedBuildInputs;
 
         shellHook = ''
-          ${pkgs.python312}/bin/python --version
+          ${pkgs.python314}/bin/python --version
         '';
       };
-    });
+    };
   };
 }

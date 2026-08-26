@@ -3,33 +3,21 @@ rec {
     path = ./elixir;
     description = "Elixir development environment";
   };
+
   go = {
     path = ./go;
     description = "Go (Golang) development environment";
   };
 
-  hashi = {
-    path = ./hashi;
-    description = "HashiCorp DevOps tools development environment";
-  };
-
-  haskell = {
-    path = ./haskell;
-    description = "Haskell development environment";
-  };
+  # need to verify if unfree
+  # hashi = {
+  #   path = ./hashi;
+  #   description = "HashiCorp DevOps tools development environment";
+  # };
 
   nix = {
     path = ./nix;
     description = "Nix development environment";
-  };
-
-  node = {
-    path = ./node;
-    description = "Node.js development environment";
-  };
-  php = {
-    path = ./php;
-    description = "PHP development environment";
   };
 
   python = {
@@ -40,16 +28,6 @@ rec {
   pyscript = {
     path = ./pyscript;
     description = "A simple python script environment";
-  };
-
-  rust = {
-    path = ./rust;
-    description = "Rust development environment";
-  };
-
-  rust-toolchain = {
-    path = ./rust-toolchain;
-    description = "Rust development environment with Rust version defined by a rust-toolchain.toml file";
   };
 
   latex = {
@@ -73,11 +51,9 @@ rec {
     description = "A simple lua dev environment";
   };
 
-  shell = {
-    path = ./shell;
-    description = "A simple shell dev environment";
+  bash = {
+    path = ./bash;
+    description = "A simple bash shell dev environment";
   };
 
-  # Aliases
-  rt = rust-toolchain;
 }
