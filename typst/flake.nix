@@ -6,12 +6,16 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
-  outputs = { flake-parts, ... }: flake-parts.lib.mkFlake {
+  outputs = inputs@{ flake-parts, ... }: flake-parts.lib.mkFlake {inherit inputs;} {
+    systems = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     perSystem = {pkgs, ...}: {
-      devShells.default = pkgs.mkShell {
+      devShells.default = pkgs.mkShellNoCC {
         packages = with pkgs; [
           typst
-          typst-fmt
+          typstyle
           just
         ];
       };
