@@ -40,6 +40,11 @@ rec {
     description = "Typst markup environment";
   };
 
+  typeset = {
+    path = ./typeset;
+    description = "Typesetting with typst's min-book";
+  };
+
   simple-container = {
     path = ./simple-container;
     description = "A simple web server running in a nix container";
