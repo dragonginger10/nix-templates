@@ -12,13 +12,8 @@
       "aarch64-linux"
     ];
     perSystem = {pkgs, ...}: {
-      devShells.default = pkgs.mkShellNoCC {
-        packages = with pkgs; [
-          typst
-          typstyle
-          just
-        ];
-      };
+      devShells.default =  import ./.nix/shell.nix { inherit pkgs; };
+      packages =  import ./.nix/package.nix { inherit pkgs; };
     };
   };
 }

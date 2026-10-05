@@ -1,12 +1,9 @@
-buildfolder := "./build"
+buildfolder := "./result"
 output := "{{buildfolder}}/main.pdf"
 srcfile := "main.typ"
 
-build: buildoutput
-  typst compile ./{{srcfile}} {{output}}
-
-buildoutput:
-  mkdir -p {{buildfolder}}
+build:
+  nix run .#
 
 clean:
   rm -rf {{buildfolder}}
