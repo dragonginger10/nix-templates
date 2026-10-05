@@ -11,9 +11,9 @@
       "x86_64-linux"
       "aarch64-linux"
     ];
-    perSystem = {pkgs, ...}: {
-      devShells.default =  import ./.nix/shell.nix { inherit pkgs; };
-      packages =  import ./.nix/package.nix { inherit pkgs; };
+    perSystem = {pkgs, self', ...}: {
+      devShells.default =  import ./.nix/shell.nix { inherit self' pkgs; };
+      packages =  import ./.nix/package.nix { inherit self' pkgs; };
     };
   };
 }
