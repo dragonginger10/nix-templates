@@ -2,7 +2,7 @@
   localFonts = pkgs.stdenvNoCC.mkDerivation {
       pname = "fonts";
       version = "0.1";
-      src = ./fonts;
+      src = ../fonts;
 
       installPhase = ''
         mkdir -p $out/share/fonts/truetype/
